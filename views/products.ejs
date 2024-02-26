@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/views/product.css">
+    <title>Products</title>
+    <style>
+        /* product.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-top: 20px;
+}
+
+form {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+form {
+    display: inline;
+}
+
+button[type="submit"] {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    </style>
+</head>
+<body>
+    <h1>Products</h1>
+    <form action="/products" method="POST">
+        <input type="text" name="name" placeholder="Product Name" required>
+        <select name="category_id">
+            <% categories.forEach(category => { %>
+                <option value="<%= category.id %>"><%= category.name %></option>
+            <% }) %>
+        </select>
+        <button type="submit">Add Product</button>
+    </form>
+    <ul>
+        <% products.forEach(product => { %>
+            <li>
+                <%= product.name %> - <%= product.categoryName %> 
+                <form action="/products/<%= product.id %>?_method=DELETE" method="POST" style="display: inline;">
+                    <button type="submit">Delete</button>
+                </form>
+                <form action="/products/<%= product.id %>?_method=PUT" method="POST" style="display: inline;">
+                    <input type="text" name="name" value="<%= product.name %>" placeholder="New Name">
+                    <select name="category_id">
+                        <% categories.forEach(category => { %>
+                            <option value="<%= category.id %>" <%= product.category_id == category.id ? 'selected' : '' %>><%= category.name %></option>
+                        <% }) %>
+                    </select>
+                    <button type="submit"><a href="/products/<%= product.id %>/edit">Edit</a></button> 
+                </form>
+            </li>
+        <% }) %>
+    </ul>
+</body>
+
+
+</html>
