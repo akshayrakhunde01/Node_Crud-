@@ -3,15 +3,58 @@ const router = express.Router();
 const db = require('../config/db');
 
 // Get all products
+// Get all products
+// Get all products
 router.get('/', (req, res) => {
-    db.query('SELECT * FROM products', (err, products) => {
-        if (err) throw err;
-        db.query('SELECT * FROM categories', (err, categories) => {
-            if (err) throw err;
-            res.render('products', { products: products, categories: categories });
+    const pageSize = 10; // Number of products per page
+    const page = parseInt(req.query.page) || 1; // Current page number, default is 1
+    const offset = (page - 1) * pageSize; // Calculate offset based on page number
+
+    // Query to fetch products with pagination
+    const query = `
+        SELECT * FROM products
+        ORDER BY id
+        LIMIT ?, ?
+    `;
+
+    db.query(query, [offset, pageSize], (err, products) => {
+        if (err) {
+            console.error("Error retrieving products:", err);
+            res.status(500).send("Internal Server Error");
+            return;
+        }
+
+        // Fetch total number of products
+        db.query('SELECT COUNT(*) AS total FROM products', (err, result) => {
+            if (err) {
+                console.error("Error counting products:", err);
+                res.status(500).send("Internal Server Error");
+                return;
+            }
+
+            const totalCount = result[0].total;
+            const totalPages = Math.ceil(totalCount / pageSize);
+
+            // Fetch categories
+            db.query('SELECT * FROM categories', (err, categories) => {
+                if (err) {
+                    console.error("Error retrieving categories:", err);
+                    res.status(500).send("Internal Server Error");
+                    return;
+                }
+
+                // Render the products view with products, categories, and pagination data
+                res.render('products', {
+                    products: products,
+                    categories: categories,
+                    totalPages: totalPages,
+                    currentPage: page
+                });
+            });
         });
     });
 });
+
 
 
 // Add a new product
