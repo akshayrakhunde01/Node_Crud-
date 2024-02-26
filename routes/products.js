@@ -3,16 +3,18 @@ const router = express.Router();
 const db = require('../config/db');
 
 // Geting all products
-
+// Geting all products
 router.get('/', (req, res) => {
     const pageSize = 10; // Number of products per page
     const page = parseInt(req.query.page) || 1; // Current page number, default is 1
     const offset = (page - 1) * pageSize; // Calculate offset based on page number
 
-    // Query to fetch products with pagination
+    // Query to fetch products with pagination and category name
     const query = `
-        SELECT * FROM products
-        ORDER BY id
+        SELECT p.id, p.name, p.category_id, c.name AS categoryName
+        FROM products p
+        INNER JOIN categories c ON p.category_id = c.id
+        ORDER BY p.id
         LIMIT ?, ?
     `;
 
@@ -23,7 +25,7 @@ router.get('/', (req, res) => {
             return;
         }
 
-        // Fetch how mny number of request
+        // Fetch how many number of requests
         db.query('SELECT COUNT(*) AS total FROM products', (err, result) => {
             if (err) {
                 console.error("Error counting products:", err);
@@ -34,7 +36,7 @@ router.get('/', (req, res) => {
             const totalCount = result[0].total;
             const totalPages = Math.ceil(totalCount / pageSize);
 
-            // fetchh categories
+            // Fetch categories
             db.query('SELECT * FROM categories', (err, categories) => {
                 if (err) {
                     console.error("Error retrieving categories:", err);
@@ -53,6 +55,7 @@ router.get('/', (req, res) => {
         });
     });
 });
+
 
 
 
