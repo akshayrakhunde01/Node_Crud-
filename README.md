@@ -1,5 +1,4 @@
-use npm install
-node index.js
-# NodeMysql
-# node
-# NimapAssasment
+1- npm install
+2- node index.js
+
+
