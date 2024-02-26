@@ -2,9 +2,8 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
 
-// Get all products
-// Get all products
-// Get all products
+// Geting all products
+
 router.get('/', (req, res) => {
     const pageSize = 10; // Number of products per page
     const page = parseInt(req.query.page) || 1; // Current page number, default is 1
@@ -24,7 +23,7 @@ router.get('/', (req, res) => {
             return;
         }
 
-        // Fetch total number of products
+        // Fetch how mny number of request
         db.query('SELECT COUNT(*) AS total FROM products', (err, result) => {
             if (err) {
                 console.error("Error counting products:", err);
@@ -35,7 +34,7 @@ router.get('/', (req, res) => {
             const totalCount = result[0].total;
             const totalPages = Math.ceil(totalCount / pageSize);
 
-            // Fetch categories
+            // fetchh categories
             db.query('SELECT * FROM categories', (err, categories) => {
                 if (err) {
                     console.error("Error retrieving categories:", err);
@@ -57,7 +56,7 @@ router.get('/', (req, res) => {
 
 
 
-// Add a new product
+// Add new product
 router.post('/', (req, res) => {
     const { name, category_id } = req.body;
     db.query('INSERT INTO products (name, category_id) VALUES (?, ?)', [name, category_id], (err, result) => {
@@ -66,7 +65,7 @@ router.post('/', (req, res) => {
     });
 });
 
-// Update a product
+// Update  product
 router.get('/:id/edit', (req, res) => {
     const productId = req.params.id;
 
@@ -79,7 +78,7 @@ router.get('/:id/edit', (req, res) => {
             return;
         }
 
-        // Fetch all categories from the database
+        // Ftch al catgries from the database
         db.query('SELECT * FROM categories', (err, categoryResult) => {
             if (err) {
                 // Handle the error
@@ -108,7 +107,7 @@ router.put('/:id', (req, res) => {
     });
 });
 
-// Delete a product
+// Delet product
 router.delete('/:id', (req, res) => {
     // Extract the product ID from the request parameters
     const { id } = req.params;

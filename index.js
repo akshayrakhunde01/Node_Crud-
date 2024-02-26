@@ -1,4 +1,4 @@
-// Import required modules
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
@@ -26,12 +26,12 @@ const productsRouter = require('./routes/products');
 app.use('/categories', categoriesRouter);
 app.use('/products', productsRouter);
 
-// Additional route for the root URL
+//  for the root URL
 app.get('/', (req, res) => {
     res.send("Use /categories & /products");
 });
 
 // Start the server
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+    console.log(`Server is running on port http://localhost:${port}/products`);
 });

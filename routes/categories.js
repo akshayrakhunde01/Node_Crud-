@@ -1,4 +1,4 @@
-// routes/categories.js
+
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
@@ -20,7 +20,7 @@ router.post('/', (req, res) => {
     });
 });
 
-// Update a category
+// Updte category
 router.put('/:id', (req, res) => {
     const { id } = req.params;
     const { name } = req.body;
@@ -29,11 +29,11 @@ router.put('/:id', (req, res) => {
         res.redirect('/categories');
     });
 });
-// Route for editing a category
+//  editing category
 router.get('/:id/edit', (req, res) => {
     const categoryId = req.params.id;
     
-    // Fetch the category with the specified ID from the database
+    // Ftch the category with  specific id from the database
     db.query('SELECT * FROM categories WHERE id = ?', [categoryId], (err, results) => {
         if (err) throw err;
 
@@ -48,7 +48,7 @@ router.get('/:id/edit', (req, res) => {
     });
 });
 
-// Delete a category
+// Delete  catgry
 router.delete('/:id', (req, res) => {
     const { id } = req.params; // Extract the ID parameter from the request URL
     db.query('DELETE FROM categories WHERE id = ?', [id], (err, result) => { // Execute a DELETE query to delete the category with the specified ID
